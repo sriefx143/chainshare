@@ -105,7 +105,17 @@ func (t *UserAccount) Invoke(stub *shim.ChaincodeStub, function string, args []s
 
 	if function == "write" {
 		t.writeUserHash(stub, args[0], args[1:])
+	} else if function == "init" {
+
+		var userid = args[0]
+		var store = userid + "-" + "profile"
+
+		t.inituser(stub, store, args)
+
+		var shastore = userid + "-sha-" + "profile"
+		t.inituser(stub, shastore, args)
 	}
+
 	return nil, nil
 }
 
