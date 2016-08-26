@@ -196,9 +196,10 @@ func (t *UserAccount) remove(stub *shim.ChaincodeStub, args []string) ([]byte, e
 func (t *UserAccount) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 
 	if function == "read" {
-		t.read(stub, args)
+		retval, err := t.read(stub, args)
+		return retval, err
 	}
-	return nil, errors.New("Received unknown function query")
+	return nil, errors.New("no function called")
 }
 
 func (t *UserAccount) read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
