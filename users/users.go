@@ -142,12 +142,14 @@ func (t *UserAccount) writeUserHash(stub *shim.ChaincodeStub, userid string, arg
 				var mscurrent map[string]string = up.Kvalues
 				_ = len(mscurrent)
 				var msnew = make(map[string]string)
+				for k, v := range mscurrent {
+					msnew[k] = v
+				}
 				for _, e := range args {
 					r := strings.Split(e, ":")
 					if len(r[1]) > 0 {
 						msnew[r[0]] = r[1]
 					}
-
 				}
 
 				up.Kvalues = msnew
