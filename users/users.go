@@ -135,16 +135,17 @@ func (t *UserAccount) writeUserHash(stub *shim.ChaincodeStub, userid string, arg
 
 	br, er := stub.GetState(shastore)
 
-	if len(string(br)) > 0 && string(br) != "INIT" {
+	if string(br) != "INIT" {
 		if er == nil {
 			er2 := json.Unmarshal(br, &up)
 			if er2 != nil {
-				var mscurrent map[string]string = up.Kvalues
-				_ = len(mscurrent)
+
 				var msnew = make(map[string]string)
-				for k, v := range mscurrent {
+
+				for k, v := range up.Kvalues {
 					msnew[k] = v
 				}
+
 				for _, e := range args {
 					r := strings.Split(e, ":")
 					if len(r[1]) > 0 {
@@ -234,3 +235,4 @@ func (t *UserAccount) read(stub *shim.ChaincodeStub, args []string) ([]byte, err
 
 	return barray, er
 }
+
