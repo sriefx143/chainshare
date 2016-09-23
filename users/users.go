@@ -133,45 +133,17 @@ func (t *UserAccount) writeUserHash(stub *shim.ChaincodeStub, userid string, arg
 
 	var up userprofile
 
-	br, er := stub.GetState(shastore)
-
-	if string(br) != "INIT" {
-		if er == nil {
-			er2 := json.Unmarshal(br, &up)
-			if er2 != nil {
-
-				var msnew = make(map[string]string)
-
-				for k, v := range up.Kvalues {
-					msnew[k] = v
-				}
-
-				for _, e := range args {
-					r := strings.Split(e, ":")
-					if len(r[1]) > 0 {
-						msnew[r[0]] = r[1]
-					}
-				}
-
-				up.Kvalues = msnew
-				brnew, _ := json.Marshal(up)
-				stub.PutState(shastore, brnew)
-			}
+	var msnew = make(map[string]string)
+	for _, e := range args {
+		r := strings.Split(e, ":")
+		if len(r[1]) > 0 {
+			msnew[r[0]] = r[1]
 		}
-	} else {
 
-		var msnew = make(map[string]string)
-		for _, e := range args {
-			r := strings.Split(e, ":")
-			if len(r[1]) > 0 {
-				msnew[r[0]] = r[1]
-			}
-
-		}
-		up.Kvalues = msnew
-		brnew, _ := json.Marshal(up)
-		stub.PutState(shastore, brnew)
 	}
+	up.Kvalues = msnew
+	brnew, _ := json.Marshal(up)
+	stub.PutState(shastore, brnew)
 
 	return nil, nil
 
