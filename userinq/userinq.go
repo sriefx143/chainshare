@@ -17,6 +17,13 @@ type Inqtoken struct {
 	Inquiredby string `json:"inquiredby"`
 }
 
+type Inqtoken2 struct {
+	Token      string `json:"token"`
+	Dated      string `json:"dated"`
+	Inquiredby string `json:"inquiredby"`
+	InqData    string `json:"inqdata"`
+}
+
 type IDInquiry struct {
 }
 
@@ -47,7 +54,7 @@ func (i *IDInquiry) postInq(stub *shim.ChaincodeStub, args []string) ([]byte, er
 
 	posterkey := args[0] + "-" + "inq"
 	tm := time.Now().Format(time.RFC3339)
-	tk := Inqtoken{Token: args[1], Dated: tm, Inquiredby: args[0]}
+	tk := Inqtoken2{Token: args[1], Dated: tm, Inquiredby: args[0], InqData: args[2]}
 	jStr, _ := json.Marshal(tk)
 	stub.PutState(posterkey, jStr)
 
@@ -62,7 +69,7 @@ func (i *IDInquiry) compareInq(stub *shim.ChaincodeStub, args []string) ([]byte,
 	poster := args[0]
 	inquiredby := args[1]
 	tokenVal := args[2]
-	var tk Inqtoken
+	var tk Inqtoken2
 
 	posterkey := poster + "-" + "inq"
 	stateData, _ := stub.GetState(posterkey)
